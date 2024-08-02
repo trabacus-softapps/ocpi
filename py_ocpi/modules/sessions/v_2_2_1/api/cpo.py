@@ -16,7 +16,7 @@ router = APIRouter(
 )
 
 
-@router.get("/", response_model=OCPIResponse)
+@router.get("", response_model=OCPIResponse)
 async def get_sessions(request: Request,
                        response: Response,
                        crud: Crud = Depends(get_crud),

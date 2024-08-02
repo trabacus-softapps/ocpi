@@ -17,7 +17,7 @@ router = APIRouter(
 )
 
 
-@router.get("/", response_model=OCPIResponse)
+@router.get("", response_model=OCPIResponse)
 async def get_credentials(request: Request, crud: Crud = Depends(get_crud), adapter: Adapter = Depends(get_adapter)):
     auth_token = get_auth_token(request)
 
@@ -29,7 +29,7 @@ async def get_credentials(request: Request, crud: Crud = Depends(get_crud), adap
     )
 
 
-@router.post("/", response_model=OCPIResponse)
+@router.post("", response_model=OCPIResponse)
 async def post_credentials(request: Request, credentials: Credentials,
                            crud: Crud = Depends(get_crud), adapter: Adapter = Depends(get_adapter)):
     auth_token = get_auth_token(request)
@@ -60,7 +60,7 @@ async def post_credentials(request: Request, credentials: Credentials,
                     data=[],
                     **status.OCPI_3002_UNSUPPORTED_VERSION,
                 )
-
+            #version_url = 'http://localhost:8010/ocpi/2.2.1/details'
             response_endpoints = await client.get(version_url,
                                                   headers={'authorization': authorization_token})
 
@@ -88,7 +88,7 @@ async def post_credentials(request: Request, credentials: Credentials,
     )
 
 
-@router.put("/", response_model=OCPIResponse)
+@router.put("", response_model=OCPIResponse)
 async def update_credentials(request: Request, credentials: Credentials,
                              crud: Crud = Depends(get_crud), adapter: Adapter = Depends(get_adapter)):
     auth_token = get_auth_token(request)
@@ -118,7 +118,7 @@ async def update_credentials(request: Request, credentials: Credentials,
                     data=[],
                     **status.OCPI_3002_UNSUPPORTED_VERSION,
                 )
-
+            #version_url = 'http://localhost:8010/ocpi/2.2.1/details'
             response_endpoints = await client.get(version_url,
                                                   headers={'authorization': authorization_token})
 
@@ -144,7 +144,7 @@ async def update_credentials(request: Request, credentials: Credentials,
     )
 
 
-@router.delete("/", response_model=OCPIResponse)
+@router.delete("", response_model=OCPIResponse)
 async def remove_credentials(request: Request, crud: Crud = Depends(get_crud), adapter: Adapter = Depends(get_adapter)):
     auth_token = get_auth_token(request)
 

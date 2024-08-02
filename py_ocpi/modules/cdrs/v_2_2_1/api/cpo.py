@@ -14,7 +14,7 @@ router = APIRouter(
 )
 
 
-@router.get("/", response_model=OCPIResponse)
+@router.get("", response_model=OCPIResponse)
 async def get_cdrs(response: Response,
                    request: Request,
                    crud: Crud = Depends(get_crud),
