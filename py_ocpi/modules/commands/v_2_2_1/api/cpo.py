@@ -41,14 +41,14 @@ async def apply_pydantic_schema(command: str, data: dict):
     return data
 
 
-async def send_command_result(response_url: str, command: CommandType, sess_token: str, auth_token: str, crud: Crud, adapter: Adapter):
+async def send_command_result(response_url: str, command: CommandType, session: str, auth_token: str, crud: Crud, adapter: Adapter):
     client_auth_token = await crud.do(ModuleID.commands, RoleEnum.cpo, Action.get_client_token,
                                       auth_token=auth_token, version=VersionNumber.v_2_2_1)
 
     for _ in range(150):  # check for 5 mins
         # since command has no id, 0 is used for id parameter of crud.get
         command_result = await crud.get(ModuleID.commands, RoleEnum.cpo, 0,
-                                        auth_token=auth_token, version=VersionNumber.v_2_2_1, command=command, sess_token=sess_token)
+                                        auth_token=auth_token, version=VersionNumber.v_2_2_1, command=command, session=session)
         if command_result:
             break
         await sleep(2)
@@ -84,9 +84,13 @@ async def receive_command(request: Request, command: CommandType, data: dict, ba
         command_response = await crud.do(ModuleID.commands, RoleEnum.cpo, Action.send_command, command_data.dict(),
                                          command=command, auth_token=auth_token, version=VersionNumber.v_2_2_1)
 
-        sess_token = command_data.token.uid
+        session = ''
+        if command.value == CommandType.start_session.value:
+            session = command_data.token.uid
+        if command.value == CommandType.stop_session.value:
+            session = command_data.session_id
         background_tasks.add_task(send_command_result, response_url=command_data.response_url, command=command,
-                                  sess_token=sess_token, auth_token=auth_token, crud=crud, adapter=adapter)
+                                  session=session, auth_token=auth_token, crud=crud, adapter=adapter)
 
         return OCPIResponse(
             data=[adapter.command_response_adapter(command_response).dict()],
@@ -100,3 +104,4 @@ async def receive_command(request: Request, command: CommandType, data: dict, ba
             data=[command_response.dict()],
             **status.OCPI_2003_UNKNOWN_LOCATION,
         )
+
