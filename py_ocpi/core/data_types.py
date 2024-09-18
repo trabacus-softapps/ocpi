@@ -124,7 +124,7 @@ class DateTime(str):
 
     @classmethod
     def validate(cls, v):
-        formated_v = datetime.fromisoformat(v)
+        formated_v = datetime.fromisoformat(v.replace('Z','').replace('z',''))
         return cls(formated_v)
 
     def __repr__(self):
