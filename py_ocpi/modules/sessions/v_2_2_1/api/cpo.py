@@ -27,9 +27,13 @@ async def get_sessions(request: Request,
     data_list = await get_list(response, filters, ModuleID.sessions, RoleEnum.cpo,
                                VersionNumber.v_2_2_1, crud, auth_token=auth_token)
 
-    sessions = []
-    for data in data_list:
-        sessions.append(adapter.session_adapter(data).dict())
+    if data_list and len(data_list) > 1:
+        sessions = []
+        for data in data_list:
+            sessions.append(adapter.session_adapter(data).dict())
+    else:
+        sessions = len(data_list) == 1 and adapter.session_adapter(data_list[0]).dict() or {}
+
     return OCPIResponse(
         data=sessions,
         **status.OCPI_1000_GENERIC_SUCESS_CODE,
@@ -46,6 +50,6 @@ async def set_charging_preference(request: Request,
     data = await crud.update(ModuleID.sessions, RoleEnum.cpo, charging_preferences.dict(), session_id,
                              auth_token=auth_token, version=VersionNumber.v_2_2_1)
     return OCPIResponse(
-        data=[adapter.charging_preference_adapter(data).dict()],
+        data=adapter.charging_preference_adapter(data).dict(),
         **status.OCPI_1000_GENERIC_SUCESS_CODE,
     )

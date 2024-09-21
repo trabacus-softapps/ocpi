@@ -25,9 +25,13 @@ async def get_tariffs(request: Request,
     data_list = await get_list(response, filters, ModuleID.tariffs, RoleEnum.cpo,
                                VersionNumber.v_2_2_1, crud, auth_token=auth_token)
 
-    tariffs = []
-    for data in data_list:
-        tariffs.append(adapter.tariff_adapter(data).dict())
+    if data_list and len(data_list) > 1:
+        tariffs = []
+        for data in data_list:
+            tariffs.append(adapter.tariff_adapter(data).dict())
+    else:
+        tariffs = len(data_list) == 1 and adapter.tariff_adapter(data_list[0]).dict() or {}
+
     return OCPIResponse(
         data=tariffs,
         **status.OCPI_1000_GENERIC_SUCESS_CODE,

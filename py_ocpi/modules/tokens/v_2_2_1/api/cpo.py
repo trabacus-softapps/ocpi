@@ -28,7 +28,7 @@ async def get_token(country_code: CiString(2), party_id: CiString(3), token_uid:
                           party_id=party_id, token_type=token_type,
                           version=VersionNumber.v_2_2_1)
     return OCPIResponse(
-        data=[adapter.token_adapter(data).dict()],
+        data=adapter.token_adapter(data).dict(),
         **status.OCPI_1000_GENERIC_SUCESS_CODE,
     )
 
@@ -51,7 +51,7 @@ async def add_or_update_token(country_code: CiString(2), party_id: CiString(3), 
                                  auth_token=auth_token, country_code=country_code,
                                  party_id=party_id, version=VersionNumber.v_2_2_1)
     return OCPIResponse(
-        data=[adapter.token_adapter(data).dict()],
+        data=adapter.token_adapter(data).dict(),
         **status.OCPI_1000_GENERIC_SUCESS_CODE,
     )
 
@@ -74,6 +74,6 @@ async def partial_update_token(country_code: CiString(2), party_id: CiString(3),
                              auth_token=auth_token, country_code=country_code,
                              party_id=party_id, version=VersionNumber.v_2_2_1)
     return OCPIResponse(
-        data=[adapter.token_adapter(data).dict()],
+        data=adapter.token_adapter(data).dict(),
         **status.OCPI_1000_GENERIC_SUCESS_CODE,
     )
