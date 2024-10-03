@@ -127,13 +127,13 @@ class DateTime(str):
         # formated_v = datetime.fromisoformat(v.replace('Z','').replace('z',''))
         # return cls(formated_v)
 
-        for fmt in ('%Y-%m-%dT%H:%M:%SZ', '%Y-%m-%dT%H:%M:%S', '%Y-%m-%dT%H:%M:%S.%fZ', '%Y-%m-%dT%H:%M:%S.%f'):
+        for fmt in ('%Y-%m-%d %H:%M:%SZ', '%Y-%m-%d %H:%M:%S', '%Y-%m-%d %H:%M:%S.%fZ', '%Y-%m-%d %H:%M:%S.%f'):
             try:
-                formated_v = datetime.strptime(v, fmt)
+                formated_v = datetime.strptime(v.replace('T',' '), fmt)
                 return cls(formated_v)
             except ValueError:
                 pass
-        raise ValueError('no valid date format found')
+        return datetime.fromisoformat(v)
 
     def __repr__(self):
         return f'DateTime({super().__repr__()})'
