@@ -102,7 +102,7 @@ async def receive_command(request: Request, command: CommandType, data: dict, ba
     except NotFoundOCPIError:
         command_response = CommandResponse(result=CommandResponseType.rejected, timeout=0)
         return OCPIResponse(
-            data=[command_response.dict()],
+            data=command_response.dict(),
             **status.OCPI_2003_UNKNOWN_LOCATION,
         )
 
