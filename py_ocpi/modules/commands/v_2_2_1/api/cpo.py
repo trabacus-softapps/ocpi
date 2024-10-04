@@ -94,7 +94,7 @@ async def receive_command(request: Request, command: CommandType, data: dict, ba
                                   session=session, auth_token=auth_token, crud=crud, adapter=adapter)
 
         return OCPIResponse(
-            data=[adapter.command_response_adapter(command_response).dict()],
+            data=adapter.command_response_adapter(command_response).dict(),
             **status.OCPI_1000_GENERIC_SUCESS_CODE,
         )
 
