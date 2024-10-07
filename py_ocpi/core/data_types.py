@@ -133,7 +133,9 @@ class DateTime(str):
                 return cls(v)
             except ValueError:
                 pass
-        return datetime.fromisoformat(v)
+        #raise ValueError('Invalid isoformat string: %s' %(v))
+        formated_v = datetime.fromisoformat(v)
+        return cls(formated_v)
 
     def __repr__(self):
         return f'DateTime({super().__repr__()})'
