@@ -45,7 +45,7 @@ async def send_command_result(response_url: str, command: CommandType, session: 
     client_auth_token = await crud.do(ModuleID.commands, RoleEnum.cpo, Action.get_client_token,
                                       auth_token=auth_token, version=VersionNumber.v_2_2_1)
 
-    for _ in range(150):  # check for 5 mins
+    for _ in range(30):  # check for 1 mins
         # since command has no id, 0 is used for id parameter of crud.get
         command_result = await crud.get(ModuleID.commands, RoleEnum.cpo, 0,
                                         auth_token=auth_token, version=VersionNumber.v_2_2_1, command=command, session=session)
