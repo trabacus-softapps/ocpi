@@ -71,7 +71,7 @@ class CiStringBase(str):
             raise ValueError('invalid cistring format')
         if len(v) > cls.max_length:
             raise ValueError(f'{field.name} length must be lower or equal to {cls.max_length}')
-        return cls(v.lower())
+        return cls(v)
 
     def __repr__(self):
         return f'CiString({super().__repr__()})'
