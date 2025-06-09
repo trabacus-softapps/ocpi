@@ -14,7 +14,7 @@ class OCPIResponse(BaseModel):
     data: Union[list, dict]
     status_code: int
     status_message: String(255)
-    timestamp: DateTime = str(datetime.now(timezone.utc))
+    timestamp: DateTime = str(datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ'))
 
 
 class Receiver(BaseModel):
