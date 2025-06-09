@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, Response, Request
+from datetime import datetime, timezone
 
 from py_ocpi.modules.sessions.v_2_2_1.schemas import ChargingPreferences
 from py_ocpi.modules.versions.enums import VersionNumber
@@ -37,6 +38,7 @@ async def get_sessions(request: Request,
     return OCPIResponse(
         data=sessions,
         **status.OCPI_1000_GENERIC_SUCESS_CODE,
+        timestamp=str(datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')),
     )
 
 
@@ -52,4 +54,5 @@ async def set_charging_preference(request: Request,
     return OCPIResponse(
         data=adapter.charging_preference_adapter(data).dict(),
         **status.OCPI_1000_GENERIC_SUCESS_CODE,
+        timestamp=str(datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')),
     )

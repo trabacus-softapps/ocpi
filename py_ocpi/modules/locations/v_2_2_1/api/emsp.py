@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, Request
+from datetime import datetime, timezone
 
 from py_ocpi.core.utils import get_auth_token, partially_update_attributes
 from py_ocpi.core import status
@@ -30,6 +31,7 @@ async def get_location(request: Request, country_code: CiString(2), party_id: Ci
     return OCPIResponse(
         data=[adapter.location_adapter(data).dict()],
         **status.OCPI_1000_GENERIC_SUCESS_CODE,
+        timestamp=str(datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')),
     )
 
 
@@ -46,6 +48,7 @@ async def get_evse(request: Request, country_code: CiString(2), party_id: CiStri
             return OCPIResponse(
                 data=[evse.dict()],
                 **status.OCPI_1000_GENERIC_SUCESS_CODE,
+                timestamp=str(datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')),
             )
 
 
@@ -65,6 +68,7 @@ async def get_connector(request: Request, country_code: CiString(2), party_id: C
                     return OCPIResponse(
                         data=[connector.dict()],
                         **status.OCPI_1000_GENERIC_SUCESS_CODE,
+                        timestamp=str(datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')),
                     )
 
 
@@ -88,6 +92,7 @@ async def add_or_update_location(request: Request, country_code: CiString(2), pa
     return OCPIResponse(
         data=[adapter.location_adapter(data).dict()],
         **status.OCPI_1000_GENERIC_SUCESS_CODE,
+        timestamp=str(datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')),
     )
 
 
@@ -118,6 +123,7 @@ async def add_or_update_evse(request: Request, country_code: CiString(2), party_
     return OCPIResponse(
         data=[evse.dict()],
         **status.OCPI_1000_GENERIC_SUCESS_CODE,
+        timestamp=str(datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')),
     )
 
 
@@ -154,6 +160,7 @@ async def add_or_update_connector(request: Request, country_code: CiString(2), p
     return OCPIResponse(
         data=[connector.dict()],
         **status.OCPI_1000_GENERIC_SUCESS_CODE,
+        timestamp=str(datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')),
     )
 
 
@@ -177,6 +184,7 @@ async def partial_update_location(request: Request, country_code: CiString(2), p
     return OCPIResponse(
         data=[adapter.location_adapter(data).dict()],
         **status.OCPI_1000_GENERIC_SUCESS_CODE,
+        timestamp=str(datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')),
     )
 
 
@@ -204,6 +212,7 @@ async def partial_update_evse(request: Request, country_code: CiString(2), party
     return OCPIResponse(
         data=[new_evse.dict()],
         **status.OCPI_1000_GENERIC_SUCESS_CODE,
+        timestamp=str(datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')),
     )
 
 
@@ -234,4 +243,5 @@ async def partial_update_connector(request: Request, country_code: CiString(2), 
     return OCPIResponse(
         data=[new_connector.dict()],
         **status.OCPI_1000_GENERIC_SUCESS_CODE,
+        timestamp=str(datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')),
     )

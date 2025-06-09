@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, Request
+from datetime import datetime, timezone
 
 from py_ocpi.modules.sessions.v_2_2_1.schemas import SessionPartialUpdate, Session
 from py_ocpi.modules.versions.enums import VersionNumber
@@ -26,6 +27,7 @@ async def get_session(request: Request, country_code: CiString(2), party_id: CiS
     return OCPIResponse(
         data=[adapter.session_adapter(data, VersionNumber.v_2_2_1).dict()],
         **status.OCPI_1000_GENERIC_SUCESS_CODE,
+        timestamp=str(datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')),
     )
 
 
@@ -49,6 +51,7 @@ async def add_or_update_session(request: Request, country_code: CiString(2), par
     return OCPIResponse(
         data=[adapter.session_adapter(data).dict()],
         **status.OCPI_1000_GENERIC_SUCESS_CODE,
+        timestamp=str(datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')),
     )
 
 
@@ -72,4 +75,5 @@ async def partial_update_session(request: Request, country_code: CiString(2), pa
     return OCPIResponse(
         data=[adapter.session_adapter(data).dict()],
         **status.OCPI_1000_GENERIC_SUCESS_CODE,
+        timestamp=str(datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')),
     )

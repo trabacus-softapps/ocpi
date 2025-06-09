@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, Request
+from datetime import datetime, timezone
 
 from py_ocpi.core.dependencies import get_crud, get_adapter
 from py_ocpi.core.enums import ModuleID, RoleEnum
@@ -26,4 +27,5 @@ async def receive_command_result(request: Request, uid: str, command_result: Com
     return OCPIResponse(
         data=[],
         **status.OCPI_1000_GENERIC_SUCESS_CODE,
+        timestamp=str(datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')),
     )

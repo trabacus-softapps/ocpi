@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, Response, Request, status as http_status
+from datetime import datetime, timezone
 
 from py_ocpi.modules.tokens.v_2_2_1.enums import TokenType
 from py_ocpi.modules.tokens.v_2_2_1.schemas import LocationReference, AuthorizationInfo
@@ -36,6 +37,7 @@ async def get_tokens(request: Request,
     return OCPIResponse(
         data=tokens,
         **status.OCPI_1000_GENERIC_SUCESS_CODE,
+        timestamp=str(datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')),
     )
 
 
@@ -65,11 +67,13 @@ async def authorize_token(request: Request, response: Response,
             return OCPIResponse(
                 data=[],
                 **status.OCPI_2002_NOT_ENOUGH_INFORMATION,
+                timestamp=str(datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')),
             )
 
         return OCPIResponse(
             data=[adapter.authorization_adapter(authroization_result).dict()],
             **status.OCPI_1000_GENERIC_SUCESS_CODE,
+            timestamp=str(datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')),
         )
 
     # when the token is not found
@@ -78,4 +82,5 @@ async def authorize_token(request: Request, response: Response,
         return OCPIResponse(
             data=[],
             **status.OCPI_2004_UNKNOWN_TOKEN,
+            timestamp=str(datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')),
         )

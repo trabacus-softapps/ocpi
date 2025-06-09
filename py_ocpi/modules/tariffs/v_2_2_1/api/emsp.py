@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, Request
+from datetime import datetime, timezone
 
 from py_ocpi.modules.tariffs.v_2_2_1.schemas import Tariff
 from py_ocpi.modules.versions.enums import VersionNumber
@@ -26,6 +27,7 @@ async def get_tariff(request: Request, country_code: CiString(2), party_id: CiSt
     return OCPIResponse(
         data=[adapter.tariff_adapter(data, VersionNumber.v_2_2_1).dict()],
         **status.OCPI_1000_GENERIC_SUCESS_CODE,
+        timestamp=str(datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')),
     )
 
 
@@ -49,6 +51,7 @@ async def add_or_update_tariff(request: Request, country_code: CiString(2), part
     return OCPIResponse(
         data=[adapter.tariff_adapter(data).dict()],
         **status.OCPI_1000_GENERIC_SUCESS_CODE,
+        timestamp=str(datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')),
     )
 
 
@@ -64,4 +67,5 @@ async def delete_tariff(request: Request, country_code: CiString(2), party_id: C
     return OCPIResponse(
         data=[],
         **status.OCPI_1000_GENERIC_SUCESS_CODE,
+        timestamp=str(datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')),
     )

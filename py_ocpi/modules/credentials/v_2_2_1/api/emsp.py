@@ -1,6 +1,7 @@
 import httpx
 
 from fastapi import APIRouter, Depends, HTTPException, Request, status as fastapistatus
+from datetime import datetime, timezone
 
 from py_ocpi.core.schemas import OCPIResponse
 from py_ocpi.core.adapter import Adapter
@@ -26,6 +27,7 @@ async def get_credentials(request: Request, crud: Crud = Depends(get_crud), adap
     return OCPIResponse(
         data=adapter.credentials_adapter(data).dict(),
         **status.OCPI_1000_GENERIC_SUCESS_CODE,
+        timestamp=str(datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')),
     )
 
 
@@ -59,6 +61,7 @@ async def post_credentials(request: Request, credentials: Credentials,
                 return OCPIResponse(
                     data=[],
                     **status.OCPI_3002_UNSUPPORTED_VERSION,
+                    timestamp=str(datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')),
                 )
 
             response_endpoints = await client.get(version_url,
@@ -79,12 +82,14 @@ async def post_credentials(request: Request, credentials: Credentials,
 
                 return OCPIResponse(
                     data=adapter.credentials_adapter(new_credentials).dict(),
-                    **status.OCPI_1000_GENERIC_SUCESS_CODE
+                    **status.OCPI_1000_GENERIC_SUCESS_CODE,
+                    timestamp = str(datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')),
                 )
 
     return OCPIResponse(
         data=[],
         **status.OCPI_3001_UNABLE_TO_USE_CLIENTS_API,
+        timestamp=str(datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')),
     )
 
 
@@ -117,6 +122,7 @@ async def update_credentials(request: Request, credentials: Credentials,
                 return OCPIResponse(
                     data=[],
                     **status.OCPI_3002_UNSUPPORTED_VERSION,
+                    timestamp=str(datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')),
                 )
 
             response_endpoints = await client.get(version_url,
@@ -135,12 +141,14 @@ async def update_credentials(request: Request, credentials: Credentials,
 
                 return OCPIResponse(
                     data=adapter.credentials_adapter(new_credentials).dict(),
-                    **status.OCPI_1000_GENERIC_SUCESS_CODE
+                    **status.OCPI_1000_GENERIC_SUCESS_CODE,
+                    timestamp=str(datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')),
                 )
 
     return OCPIResponse(
         data=[],
         **status.OCPI_3001_UNABLE_TO_USE_CLIENTS_API,
+        timestamp=str(datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')),
     )
 
 
@@ -160,4 +168,5 @@ async def remove_credentials(request: Request,
     return OCPIResponse(
         data=[],
         **status.OCPI_1000_GENERIC_SUCESS_CODE,
+        timestamp=str(datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')),
     )

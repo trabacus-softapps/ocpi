@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, Response, Request
+from datetime import datetime, timezone
 
 from py_ocpi.modules.versions.enums import VersionNumber
 from py_ocpi.core.utils import get_auth_token, get_list
@@ -35,4 +36,5 @@ async def get_cdrs(response: Response,
     return OCPIResponse(
         data=cdrs,
         **status.OCPI_1000_GENERIC_SUCESS_CODE,
+        timestamp=str(datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')),
     )

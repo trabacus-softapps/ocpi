@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Request, Depends
+from datetime import datetime, timezone
 
 from py_ocpi.core import status
 from py_ocpi.core.data_types import CiString
@@ -30,6 +31,7 @@ async def get_token(country_code: CiString(2), party_id: CiString(3), token_uid:
     return OCPIResponse(
         data=adapter.token_adapter(data).dict(),
         **status.OCPI_1000_GENERIC_SUCESS_CODE,
+        timestamp=str(datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')),
     )
 
 
@@ -53,6 +55,7 @@ async def add_or_update_token(country_code: CiString(2), party_id: CiString(3), 
     return OCPIResponse(
         data=adapter.token_adapter(data).dict(),
         **status.OCPI_1000_GENERIC_SUCESS_CODE,
+        timestamp=str(datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')),
     )
 
 
@@ -76,4 +79,5 @@ async def partial_update_token(country_code: CiString(2), party_id: CiString(3),
     return OCPIResponse(
         data=adapter.token_adapter(data).dict(),
         **status.OCPI_1000_GENERIC_SUCESS_CODE,
+        timestamp=str(datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')),
     )

@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, Response, Request
+from datetime import datetime, timezone
 
 from py_ocpi.modules.versions.enums import VersionNumber
 from py_ocpi.core.utils import get_list, get_auth_token
@@ -32,6 +33,7 @@ async def get_locations(request: Request,
     return OCPIResponse(
         data=locations,
         **status.OCPI_1000_GENERIC_SUCESS_CODE,
+        timestamp=str(datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')),
     )
 
 
@@ -45,6 +47,7 @@ async def get_location(request: Request, location_id: CiString(36),
     return OCPIResponse(
         data=[adapter.location_adapter(data).dict()],
         **status.OCPI_1000_GENERIC_SUCESS_CODE,
+        timestamp=str(datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')),
     )
 
 
@@ -61,6 +64,7 @@ async def get_evse(request: Request, location_id: CiString(36), evse_uid: CiStri
             return OCPIResponse(
                 data=[evse.dict()],
                 **status.OCPI_1000_GENERIC_SUCESS_CODE,
+                timestamp=str(datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')),
             )
 
 
@@ -79,4 +83,5 @@ async def get_connector(request: Request, location_id: CiString(36), evse_uid: C
                     return OCPIResponse(
                         data=[connector.dict()],
                         **status.OCPI_1000_GENERIC_SUCESS_CODE,
+                        timestamp=str(datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')),
                     )

@@ -5,6 +5,7 @@ from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
 from pydantic import ValidationError
 import httpx
+from datetime import datetime, timezone
 
 from py_ocpi.core.dependencies import get_crud, get_adapter
 from py_ocpi.core.enums import ModuleID, RoleEnum, Action
@@ -96,6 +97,7 @@ async def receive_command(request: Request, command: CommandType, data: dict, ba
         return OCPIResponse(
             data=adapter.command_response_adapter(command_response).dict(),
             **status.OCPI_1000_GENERIC_SUCESS_CODE,
+            timestamp=str(datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')),
         )
 
     # when the location is not found
@@ -104,5 +106,6 @@ async def receive_command(request: Request, command: CommandType, data: dict, ba
         return OCPIResponse(
             data=command_response.dict(),
             **status.OCPI_2003_UNKNOWN_LOCATION,
+            timestamp=str(datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')),
         )
 

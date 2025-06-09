@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, Request, Response
+from datetime import datetime, timezone
 
 from py_ocpi.modules.cdrs.v_2_2_1.schemas import Cdr
 from py_ocpi.modules.versions.enums import VersionNumber
@@ -27,6 +28,7 @@ async def get_cdr(request: Request, cdr_id: CiString(36),
     return OCPIResponse(
         data=[adapter.cdr_adapter(data, VersionNumber.v_2_2_1).dict()],
         **status.OCPI_1000_GENERIC_SUCESS_CODE,
+        timestamp=str(datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')),
     )
 
 
@@ -46,4 +48,5 @@ async def add_cdr(request: Request, response: Response, cdr: Cdr,
     return OCPIResponse(
         data=[cdr_data.dict()],
         **status.OCPI_1000_GENERIC_SUCESS_CODE,
+        timestamp=str(datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')),
     )

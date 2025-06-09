@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, Request, HTTPException, status as fastapistatus
+from datetime import datetime, timezone
 
 from py_ocpi.modules.versions.schemas import VersionDetail
 from py_ocpi.modules.versions.enums import VersionNumber
@@ -27,4 +28,5 @@ async def get_version_details(request: Request, endpoints=Depends(get_endpoints)
             endpoints=endpoints[VersionNumber.v_2_2_1]
         ).dict(),
         **status.OCPI_1000_GENERIC_SUCESS_CODE,
+        timestamp=str(datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')),
     )

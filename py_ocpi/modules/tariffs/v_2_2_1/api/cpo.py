@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, Response, Request
+from datetime import datetime, timezone
 
 from py_ocpi.core.utils import get_list, get_auth_token
 from py_ocpi.core import status
@@ -35,4 +36,5 @@ async def get_tariffs(request: Request,
     return OCPIResponse(
         data=tariffs,
         **status.OCPI_1000_GENERIC_SUCESS_CODE,
+        timestamp=str(datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')),
     )
