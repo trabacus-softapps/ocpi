@@ -1,4 +1,5 @@
 from typing import Any, List
+from datetime import datetime, timezone
 
 from fastapi import FastAPI, Request, HTTPException
 from fastapi.responses import JSONResponse
@@ -28,6 +29,8 @@ class ExceptionHandlerMiddleware(BaseHTTPMiddleware):
     ):
         try:
             response = await call_next(request)
+            response.headers["X-Request-ID"] = request.headers.get("X-Request-ID", "")
+            response.headers["X-Correlation-ID"] = request.headers.get("X-Correlation-ID", "")
         except AuthorizationOCPIError as e:
             raise HTTPException(403, str(e)) from e
         except NotFoundOCPIError as e:
@@ -37,6 +40,7 @@ class ExceptionHandlerMiddleware(BaseHTTPMiddleware):
                 OCPIResponse(
                     data=[],
                     **status.OCPI_3000_GENERIC_SERVER_ERROR,
+                    timestamp=str(datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')),
                 ).dict()
             )
         return response

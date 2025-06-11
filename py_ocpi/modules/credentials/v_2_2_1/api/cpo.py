@@ -6,7 +6,7 @@ from datetime import datetime, timezone
 from py_ocpi.core.schemas import OCPIResponse
 from py_ocpi.core.adapter import Adapter
 from py_ocpi.core.crud import Crud
-from py_ocpi.core.utils import encode_string_base64, get_auth_token
+from py_ocpi.core.utils import encode_string_base64, get_auth_token, get_request_hedares
 from py_ocpi.core.dependencies import get_crud, get_adapter
 from py_ocpi.core import status
 from py_ocpi.core.enums import Action, ModuleID, RoleEnum
@@ -46,8 +46,8 @@ async def post_credentials(request: Request, credentials: Credentials,
     # Retrieve the versions and endpoints from the client
     async with httpx.AsyncClient() as client:
         authorization_token = f'Token {encode_string_base64(credentials_client_token)}'
-        response_versions = await client.get(credentials.url,
-                                             headers={'authorization': authorization_token})
+        request_headers = get_request_hedares(authorization_token)
+        response_versions = await client.get(credentials.url,headers=request_headers)
 
         if response_versions.status_code == fastapistatus.HTTP_200_OK:
             version_url = None
@@ -64,8 +64,7 @@ async def post_credentials(request: Request, credentials: Credentials,
                     timestamp=str(datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')),
                 )
             #version_url = 'http://localhost:8010/ocpi/2.2.1/details'
-            response_endpoints = await client.get(version_url,
-                                                  headers={'authorization': authorization_token})
+            response_endpoints = await client.get(version_url,headers=request_headers)
 
             if response_endpoints.status_code == fastapistatus.HTTP_200_OK:
                 # Store client credentials and generate new credentials for sender
@@ -108,7 +107,8 @@ async def update_credentials(request: Request, credentials: Credentials,
     # Retrieve the versions and endpoints from the client
     async with httpx.AsyncClient() as client:
         authorization_token = f'Token {encode_string_base64(credentials_client_token)}'
-        response_versions = await client.get(credentials.url, headers={'authorization': authorization_token})
+        request_headers = get_request_hedares(authorization_token)
+        response_versions = await client.get(credentials.url, headers=request_headers)
 
         if response_versions.status_code == fastapistatus.HTTP_200_OK:
             version_url = None
@@ -125,8 +125,7 @@ async def update_credentials(request: Request, credentials: Credentials,
                     timestamp=str(datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')),
                 )
             #version_url = 'http://localhost:8010/ocpi/2.2.1/details'
-            response_endpoints = await client.get(version_url,
-                                                  headers={'authorization': authorization_token})
+            response_endpoints = await client.get(version_url, headers=request_headers)
 
             if response_endpoints.status_code == fastapistatus.HTTP_200_OK:
                 # Update server credentials to access client's system and generate new credentials token

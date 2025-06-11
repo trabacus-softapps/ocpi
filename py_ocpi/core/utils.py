@@ -1,5 +1,6 @@
 import urllib
 import base64
+import uuid
 
 from fastapi import Response, Request
 from pydantic import BaseModel
@@ -24,6 +25,13 @@ def get_auth_token(request: Request) -> str:
         return None
     return decode_string_base64(token)
 
+def get_request_hedares(authorization_token: str, X_Request_ID:str=None, X_Correlation_ID:str=None) -> dict:
+    headers={}
+    headers['Authorization'] = authorization_token
+    X_Request_ID = X_Request_ID or str(uuid.uuid4())
+    headers['X-Request-ID'] = X_Request_ID
+    headers['X-Correlation-ID'] = X_Correlation_ID or X_Request_ID
+    return headers
 
 async def get_list(response: Response, filters: dict, module: ModuleID, role: RoleEnum,
                    version: VersionNumber, crud, *args, **kwargs):
