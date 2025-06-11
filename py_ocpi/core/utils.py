@@ -25,7 +25,7 @@ def get_auth_token(request: Request) -> str:
         return None
     return decode_string_base64(token)
 
-def get_request_hedares(authorization_token: str, X_Request_ID:str=None, X_Correlation_ID:str=None) -> dict:
+def get_request_headers(authorization_token: str, X_Request_ID:str=None, X_Correlation_ID:str=None) -> dict:
     headers={}
     headers['Authorization'] = authorization_token
     X_Request_ID = X_Request_ID or str(uuid.uuid4())

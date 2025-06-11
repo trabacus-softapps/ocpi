@@ -14,7 +14,7 @@ from py_ocpi.core.schemas import OCPIResponse
 from py_ocpi.core.adapter import Adapter
 from py_ocpi.core.crud import Crud
 from py_ocpi.core import status
-from py_ocpi.core.utils import encode_string_base64, get_auth_token, get_request_hedares
+from py_ocpi.core.utils import encode_string_base64, get_auth_token, get_request_headers
 from py_ocpi.modules.versions.enums import VersionNumber
 from py_ocpi.modules.commands.v_2_2_1.enums import CommandType
 from py_ocpi.modules.commands.v_2_2_1.schemas import (
@@ -61,7 +61,7 @@ async def send_command_result(response_url: str, command: CommandType, session: 
 
     async with httpx.AsyncClient() as client:
         authorization_token = f'Token {encode_string_base64(client_auth_token)}'
-        request_headers = get_request_hedares(authorization_token)
+        request_headers = get_request_headers(authorization_token)
         await client.post(response_url, json=command_result.dict(), headers=request_headers)
 
 

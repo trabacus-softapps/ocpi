@@ -46,7 +46,7 @@ async def post_credentials(request: Request, credentials: Credentials,
     # Retrieve the versions and endpoints from the client
     async with httpx.AsyncClient() as client:
         authorization_token = f'Token {encode_string_base64(credentials_client_token)}'
-        request_headers = get_request_hedares(authorization_token)
+        request_headers = get_request_headers(authorization_token)
         response_versions = await client.get(credentials.url, headers=request_headers)
 
         if response_versions.status_code == fastapistatus.HTTP_200_OK:
@@ -107,7 +107,7 @@ async def update_credentials(request: Request, credentials: Credentials,
     # Retrieve the versions and endpoints from the client
     async with httpx.AsyncClient() as client:
         authorization_token = f'Token {encode_string_base64(credentials_client_token)}'
-        request_headers = get_request_hedares(authorization_token)
+        request_headers = get_request_headers(authorization_token)
         response_versions = await client.get(credentials.url, headers=request_headers)
 
         if response_versions.status_code == fastapistatus.HTTP_200_OK:
